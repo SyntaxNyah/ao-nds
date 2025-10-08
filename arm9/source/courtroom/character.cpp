@@ -121,7 +121,7 @@ Character::~Character()
 		if (charGfx[i]) oamFreeGfx(&oamMain, charGfx[i]);
 	}
 
-	if (charData) mem_free(charData);
+	if (charData) ao_mem_free(charData);
 	if (sfx) wav_free_handle(sfx);
 	clearFrameData();
 
@@ -161,7 +161,7 @@ void Character::setCharImage(std::string charname, std::string relativeFile, boo
 
 	if (charData)
 	{
-		mem_free(charData);
+		ao_mem_free(charData);
 		charData = 0;
 	}
 
@@ -186,7 +186,7 @@ void Character::setCharImage(std::string charname, std::string relativeFile, boo
 	if (frameInfo.frameW == 0 && frameInfo.frameH == 0)
 	{
 		frameInfo = oldFrameInfo;
-		mem_free(charPalette);
+		ao_mem_free(charPalette);
 		return;
 	}
 	readFrameDurations(animInfos.get(relativeFile + "_durations"), frameInfo.frameDurations);
@@ -208,13 +208,13 @@ void Character::setCharImage(std::string charname, std::string relativeFile, boo
 		// decompress gfx and copy palette to slot 2
 		stream.unload();
 
-		charData = (u8*)mem_alloc(frameInfo.realW*64 * frameInfo.realH*64 * gfxCount);
+		charData = (u8*)ao_mem_alloc(frameInfo.realW*64 * frameInfo.realH*64 * gfxCount);
 		adx_update();
 
 		if (!charData)
 		{
 			frameInfo = oldFrameInfo;
-			mem_free(charPalette);
+			ao_mem_free(charPalette);
 			return;
 		}
 
@@ -276,7 +276,7 @@ void Character::setCharImage(std::string charname, std::string relativeFile, boo
 	vramSetBankF(VRAM_F_LCD);
 	dmaCopy(charPalette, &VRAM_F_EXT_SPR_PALETTE[2+pair], palSize);
 	vramSetBankF(VRAM_F_SPRITE_EXT_PALETTE);
-	mem_free(charPalette);
+	ao_mem_free(charPalette);
 
 	oamUpdate(&oamMain);
 	loop = doLoop;
@@ -352,7 +352,7 @@ void Character::unload()
 {
 	if (charData)
 	{
-		mem_free(charData);
+		ao_mem_free(charData);
 		charData = 0;
 	}
 	if (sfx)

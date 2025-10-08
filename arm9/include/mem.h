@@ -7,9 +7,9 @@
 extern "C" {
 #endif
 
-void* mem_alloc(uint32_t size);
-void mem_free(void* ptr);
-uint32_t mem_get_allocated();
+void* ao_mem_alloc(uint32_t size);
+void ao_mem_free(void* ptr);
+uint32_t ao_mem_get_allocated();
 
 #ifdef __cplusplus
 }

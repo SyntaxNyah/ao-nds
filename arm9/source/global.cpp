@@ -171,7 +171,7 @@ u8* readFile(const std::string& filename, u32* outLen, const char* mode)
 	if (outLen) *outLen = len;
 	fseek(f, 0, SEEK_SET);
 
-	u8* data = (u8*)mem_alloc(len);
+	u8* data = (u8*)ao_mem_alloc(len);
 	if (!data)
 	{
 		fclose(f);
@@ -246,7 +246,7 @@ static uint8 readByteFile(uint8 *source) {
 
 void readAndDecompressLZ77Stream(const char* filename, u8* dest)
 {
-	streamData = (u8*)mem_alloc(streamSize);
+	streamData = (u8*)ao_mem_alloc(streamSize);
 	if (!streamData)
 		return;
 
@@ -257,7 +257,7 @@ void readAndDecompressLZ77Stream(const char* filename, u8* dest)
 	swiDecompressLZSSVram(streamData, dest, 0, &decompressStreamCBs);
 
 	fclose(streamFile);
-	mem_free(streamData);
+	ao_mem_free(streamData);
 }
 #else
 static uint8 readByteFile(uint8 *source) {
@@ -272,6 +272,6 @@ void readAndDecompressLZ77Stream(const char* filename, u8* dest)
 		return;
 
 	swiDecompressLZSSVram(streamData, dest, 0, &decompressStreamCBs);
-	mem_free(streamData);
+	ao_mem_free(streamData);
 }
 #endif

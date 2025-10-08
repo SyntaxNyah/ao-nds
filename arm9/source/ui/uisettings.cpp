@@ -44,7 +44,7 @@ UIScreenSettings::~UIScreenSettings()
 
 	bgExtPaletteDisable();
 
-	mem_free(bgSubPal);
+	ao_mem_free(bgSubPal);
 
 	delete btn_back;
 	delete btn_prevTab;
@@ -88,11 +88,11 @@ void UIScreenSettings::init()
 
 	vramSetBankE(VRAM_E_BG_EXT_PALETTE);
 
-	mem_free(bgTiles);
-	mem_free(bgMap);
-	mem_free(bgPal);
-	mem_free(bgSubTiles);
-	mem_free(bgSubMap);
+	ao_mem_free(bgTiles);
+	ao_mem_free(bgMap);
+	ao_mem_free(bgPal);
+	ao_mem_free(bgSubTiles);
+	ao_mem_free(bgSubMap);
 
 	btn_back = new UIButton(&oamSub, "/data/ao-nds/ui/spr_back", 0, 3, 1, SpriteSize_32x32, 0, 192-32, 80, 30, 32, 32, 0);
 	btn_prevTab = new UIButton(&oamSub, "/data/ao-nds/ui/spr_pageLeft", btn_back->nextOamInd(), 1, 1, SpriteSize_32x16, 128-9-96, 20, 19, 14, 32, 16, 1);

@@ -3,7 +3,7 @@
 
 static uint32_t allocated = 0;
 
-void* mem_alloc(uint32_t size)
+void* ao_mem_alloc(uint32_t size)
 {
 	void* ptr = malloc(size+4);
 	if (!ptr)
@@ -14,7 +14,7 @@ void* mem_alloc(uint32_t size)
 	return ptr+4;
 }
 
-void mem_free(void* ptr)
+void ao_mem_free(void* ptr)
 {
 	if (ptr)
 	{
@@ -25,7 +25,7 @@ void mem_free(void* ptr)
 	}
 }
 
-uint32_t mem_get_allocated()
+uint32_t ao_mem_get_allocated()
 {
 	return allocated;
 }

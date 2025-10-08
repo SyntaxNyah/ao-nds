@@ -27,12 +27,12 @@ UICourtEvidence::~UICourtEvidence()
 {
 	dmaFillHalfWords(0, bgGetGfxPtr(bgIndex), (isProfiles) ? bg_profilesTilesLen : bg_evidenceTilesLen);
 
-	mem_free(bg_evidenceTiles);
-	mem_free(bg_evidenceMap);
-	mem_free(bg_evidencePal);
-	mem_free(bg_profilesTiles);
-	mem_free(bg_profilesMap);
-	mem_free(bg_profilesPal);
+	ao_mem_free(bg_evidenceTiles);
+	ao_mem_free(bg_evidenceMap);
+	ao_mem_free(bg_evidencePal);
+	ao_mem_free(bg_profilesTiles);
+	ao_mem_free(bg_profilesMap);
+	ao_mem_free(bg_profilesPal);
 
 	delete btn_pageLeft;
 	delete btn_pageRight;

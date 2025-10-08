@@ -57,9 +57,9 @@ static u32 showDisclaimer()
 	dmaCopy(bgMap, bgGetMapPtr(0), bgMapLen);
 	dmaCopy(bgPal, BG_PALETTE, bgPalLen);
 
-	mem_free(bgTiles);
-	mem_free(bgMap);
-	mem_free(bgPal);
+	ao_mem_free(bgTiles);
+	ao_mem_free(bgMap);
+	ao_mem_free(bgPal);
 
 	return bgTilesLen;
 }
@@ -187,7 +187,7 @@ int main()
 
 		if (keysHeld() & KEY_SELECT && keysHeld() & KEY_START)
 		{
-			u32 total = mem_get_allocated();
+			u32 total = ao_mem_get_allocated();
 			std::string msg = std::to_string(total) + " - " + std::to_string(total/1024) + " KB";
 			debugLabelPressA(msg.c_str());
 		}
@@ -206,8 +206,8 @@ int main()
 	cothread_delete(adxThread);
 
 	delete gEngine;
-	mem_free(acename);
-	mem_free(igiari);
+	ao_mem_free(acename);
+	ao_mem_free(igiari);
 
 	return 0;
 }

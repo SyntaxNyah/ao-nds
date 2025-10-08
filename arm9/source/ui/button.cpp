@@ -90,16 +90,16 @@ UIButton::~UIButton()
 		oamFreeGfx(oam, spriteGfx[i]);
 	}
 	delete[] spriteGfx;
-	if (currData) mem_free(currData);
-	if (currPal) mem_free(currPal);
+	if (currData) ao_mem_free(currData);
+	if (currPal) ao_mem_free(currPal);
 }
 
 void UIButton::setImage(std::string file, int sprWidth, int sprHeight, int palSlot)
 {
 	paletteSlot = palSlot;
 
-	if (currData) mem_free(currData);
-	if (currPal) mem_free(currPal);
+	if (currData) ao_mem_free(currData);
+	if (currPal) ao_mem_free(currPal);
 	if (!file.empty())
 	{
 		currData = readFile(file+".img.bin");
@@ -269,12 +269,12 @@ void UIButton::unloadRAM(bool deletePal)
 {
 	if (currData)
 	{
-		mem_free(currData);
+		ao_mem_free(currData);
 		currData = 0;
 	}
 	if (deletePal && currPal)
 	{
-		mem_free(currPal);
+		ao_mem_free(currPal);
 		currPal = 0;
 	}
 }

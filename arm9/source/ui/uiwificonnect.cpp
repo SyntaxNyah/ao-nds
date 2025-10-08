@@ -29,7 +29,7 @@ const char* assocStatusDetails[] = {
 UIScreenWifi::~UIScreenWifi()
 {
 	delete lbl_loading;
-	mem_free(sprLoadingImg);
+	ao_mem_free(sprLoadingImg);
 
 	oamFreeGfx(&oamSub, sprLoading);
 	oamClearSprite(&oamSub, 0);
@@ -67,12 +67,12 @@ void UIScreenWifi::init()
 	dmaCopy(bgSubMap, bgGetMapPtr(subBgIndex), 1536);
 	dmaCopy(bgSubPal, BG_PALETTE_SUB, 512);
 
-	mem_free(bgTiles);
-	mem_free(bgMap);
-	mem_free(bgPal);
-	mem_free(bgSubTiles);
-	mem_free(bgSubMap);
-	mem_free(bgSubPal);
+	ao_mem_free(bgTiles);
+	ao_mem_free(bgMap);
+	ao_mem_free(bgPal);
+	ao_mem_free(bgSubTiles);
+	ao_mem_free(bgSubMap);
+	ao_mem_free(bgSubPal);
 
 	lbl_loading = new UILabel(&oamSub, 1, 8, 1, RGB15(31,31,31), 0, 0);
 
@@ -88,9 +88,9 @@ void UIScreenWifi::init()
 	dmaCopy(sprLoadingPal, &VRAM_I_EXT_SPR_PALETTE[1], 512);
 	vramSetBankI(VRAM_I_SUB_SPRITE_EXT_PALETTE);
 
-	mem_free(sprLoadingPal);
+	ao_mem_free(sprLoadingPal);
 
-	Wifi_InitDefault(INIT_ONLY);
+	Wifi_InitDefault(INIT_ONLY | WIFI_ATTEMPT_DSI_MODE);
 
 	unsigned char mac[6] = {0};
 	Wifi_GetData(WIFIGETDATA_MACADDRESS, 6, mac);

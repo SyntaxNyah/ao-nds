@@ -70,12 +70,12 @@ void WTCE::clear(bool keepIndicator)
 	{
 		if (imgGfx[i])
 		{
-			mem_free(imgGfx[i]);
+			ao_mem_free(imgGfx[i]);
 			imgGfx[i] = 0;
 		}
 		if (imgPal[i])
 		{
-			mem_free(imgPal[i]);
+			ao_mem_free(imgPal[i]);
 			imgPal[i] = 0;
 		}
 	}
@@ -142,8 +142,8 @@ void WTCE::play(const std::string& msg)
 
 				oamSet(&oamMain, 125, 0, 0, 0, 10, SpriteSize_64x32, SpriteColorFormat_256Color, spr_testimonyIndicator, -1, false, false, false, false, false);
 			}
-			if (tempGfx) mem_free(tempGfx);
-			if (tempPal) mem_free(tempPal);
+			if (tempGfx) ao_mem_free(tempGfx);
+			if (tempPal) ao_mem_free(tempPal);
 
 			if (imgGfx[0] && imgPal[0] && imgGfx[1] && imgPal[1])
 			{

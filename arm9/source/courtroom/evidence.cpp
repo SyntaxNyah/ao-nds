@@ -68,8 +68,8 @@ void Evidence::showEvidence(const std::string& image, bool rightSide)
 	u8* pal = readFile(file + ".pal.bin");
 	if (!gfx || !pal)
 	{
-		if (gfx) mem_free(gfx);
-		if (pal) mem_free(pal);
+		if (gfx) ao_mem_free(gfx);
+		if (pal) ao_mem_free(pal);
 		if (image != "Empty") showEvidence("Empty", rightSide);
 		return;
 	}
@@ -80,8 +80,8 @@ void Evidence::showEvidence(const std::string& image, bool rightSide)
 	dmaCopy(pal, &VRAM_F_EXT_SPR_PALETTE[4], 512);
 	vramSetBankF(VRAM_F_SPRITE_EXT_PALETTE);
 
-	mem_free(gfx);
-	mem_free(pal);
+	ao_mem_free(gfx);
+	ao_mem_free(pal);
 
 	scaleAdd = -EVIDENCE_ADD_SCALE;
 }

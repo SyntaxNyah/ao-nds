@@ -80,7 +80,7 @@ void wifikb::update()
 	}
 
 	s32 recvdata;
-	int dummy;
+	socklen_t dummy;
 
 	int len = recvfrom(listenfd, &recvdata, sizeof(recvdata), 0, (struct sockaddr*)&udp_remote, &dummy);
 	if (len < (int)sizeof(recvdata)) return;

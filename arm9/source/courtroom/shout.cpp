@@ -121,9 +121,9 @@ void Shout::setShout(const std::string& charname, int shoutMod, const std::strin
 		BG_PALETTE[0] = oldPal;
 	}
 
-	if (bgGfx) mem_free(bgGfx);
-	if (bgMap) mem_free(bgMap);
-	if (bgPal) mem_free(bgPal);
+	if (bgGfx) ao_mem_free(bgGfx);
+	if (bgMap) ao_mem_free(bgMap);
+	if (bgPal) ao_mem_free(bgPal);
 
 	adx_update();
 }

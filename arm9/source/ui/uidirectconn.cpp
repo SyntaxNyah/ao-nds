@@ -34,9 +34,9 @@ void UIScreenDirectConn::init()
 	dmaCopy(bgMap, bgGetMapPtr(bgIndex), 1536);
 	dmaCopy(bgPal, BG_PALETTE, 512);
 
-	mem_free(bgTiles);
-	mem_free(bgMap);
-	mem_free(bgPal);
+	ao_mem_free(bgTiles);
+	ao_mem_free(bgMap);
+	ao_mem_free(bgPal);
 
 	kb_ipInput = new AOkeyboard(2, 0, 0);
 	kb_ipInput->setInputYOffset(16);

@@ -12,7 +12,7 @@ void animStream::unload()
 	{
 		fclose(f);
 		f = 0;
-		mem_free(data);
+		ao_mem_free(data);
 		data = 0;
 	}
 }
@@ -28,7 +28,7 @@ void animStream::loadFile(const char* filename, int tW, int tH, int sW, int sH)
 	sprH = sH;
 
 	f = fopen(filename, "rb");
-	data = (u8*)mem_alloc(frameSize);
+	data = (u8*)ao_mem_alloc(frameSize);
 }
 
 u8* animStream::getFrame(int i)
