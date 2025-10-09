@@ -34,7 +34,8 @@ void UISettingsKeyboard::init()
 	lbl_reverse->setPos(btn_reverse->getX()+18, btn_reverse->getY()-4);
 	lbl_reverse->setText("Reverse connection mode\n(for emulators)");
 
-	struct in_addr ip = Wifi_GetIPInfo(0,0,0,0);
+	struct in_addr ip, gateway, mask, dns1, dns2;
+	ip = Wifi_GetIPInfo(&gateway, &mask, &dns1, &dns2);
 	std::string ipStr = inet_ntoa(ip);
 
 	lbl_ipInfo->setText("Your IP:\n" + ipStr);
