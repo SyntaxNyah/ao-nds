@@ -1,7 +1,8 @@
 // libadx-nds library
 // by headshot2017 (Headshotnoby)
 // LibADX Dreamcast library (c)2012 Josh PH3NOM Pearson
-// Built on top of NDS Helix-MP3 decoder code by sverx (https://adshomebrewersdiary.blogspot.com/2012/06/mp3-streaming-on-arm7.html)
+//   Built on top of NDS Helix-MP3 decoder code by sverx (https://adshomebrewersdiary.blogspot.com/2012/06/mp3-streaming-on-arm7.html)
+//   which is a fixed version of hacker013's original code (https://gbadev.net/forum-archive/thread/23/17859.html)
 
 #include <stdlib.h>
 #include <string.h>
@@ -37,22 +38,22 @@ static int adx_parse( unsigned char *buf )
     fseek( adx_in, 0, SEEK_SET );          // Read the ADX Header into memory
 	fread( buf, 1, ADX_HDR_SIZE, adx_in );
 	if(buf[0]!=ADX_HDR_SIG ) return -1;           // Check ADX File Signature
-
+	
     // Parse the ADX File header
 	adx->ADX_Info.sample_offset = read_be16(buf+ADX_ADDR_START)-2;
 	adx->ADX_Info.chunk_size    = buf[ADX_ADDR_CHUNK];
     adx->ADX_Info.channels      = buf[ADX_ADDR_CHAN];
 	adx->ADX_Info.rate          = read_be32(buf+ADX_ADDR_RATE);
 	adx->ADX_Info.samples       = read_be32(buf+ADX_ADDR_SAMP);
-	adx->ADX_Info.loop_type     = buf[ADX_ADDR_TYPE];
-
+	adx->ADX_Info.loop_type     = buf[ADX_ADDR_TYPE]; 
+	
 	// Two known variations for possible loop informations: type 3 and type 4
     if( adx->ADX_Info.loop_type == 3 )
 	    adx->ADX_Info.loop = read_be32(buf+ADX_ADDR_LOOP);
     else if( adx->ADX_Info.loop_type == 4 )
 	    adx->ADX_Info.loop = read_be32(buf+ADX_ADDR_LOOP+0x0c);
     if( adx->ADX_Info.loop > 1 || adx->ADX_Info.loop < 0 )    // Invalid header check
-        adx->ADX_Info.loop = 0;
+        adx->ADX_Info.loop = 0;      
     if( adx->ADX_Info.loop && adx->ADX_Info.loop_type == 3 )
     {
         adx->ADX_Info.loop_samp_start = read_be32(buf+ADX_ADDR_SAMP_START);
@@ -69,10 +70,10 @@ static int adx_parse( unsigned char *buf )
     }
     if( adx->ADX_Info.loop )
      adx->ADX_Info.loop_samples = adx->ADX_Info.loop_samp_end-adx->ADX_Info.loop_samp_start;
-
+    
     fseek( adx_in, adx->ADX_Info.sample_offset, SEEK_SET ); // CRI File Signature
 	fread( buf, 1, 6, adx_in );
-
+       	
 	if ( memcmp(buf, "(c)CRI", 6) )
 		return -1;
 
@@ -85,6 +86,17 @@ static void *uncached_malloc(size_t count)
 {
 	void *p = malloc(count);
 	return ((p == 0) ? 0 : memUncached(p));
+}
+
+static cothread_t adxThread;
+static int adx_cothread(void* arg)
+{
+	while (1)
+	{
+		adx_update();
+		cothread_yield_irq(IRQ_VBLANK);
+	}
+	return 0;
 }
 
 int adx_init()
@@ -101,6 +113,8 @@ int adx_init()
 	memset((void*)adx_buffer, 0, ADX_FILE_BUFFER_SIZE*2);
 	memset((void*)adx_audioLeft, 0, ADX_AUDIO_BUFFER_SIZE);
 	memset((void*)adx_audioRight, 0, ADX_AUDIO_BUFFER_SIZE);
+
+	adxThread = cothread_create(adx_cothread, 0, 1024*4, 0);
 
 	return 1;
 }
@@ -188,7 +202,7 @@ int adx_play(const char* adx_file, int loop_enable)
 
 	int timeout = 60*3;
 	while (!fifoCheckValue32(FIFO_USER_01) && --timeout)
-		cothread_yield_irq(IRQ_VBLANK);
+		swiWaitForVBlank();
 
 	int ret = (!timeout) ? -1 : (int)fifoGetValue32(FIFO_USER_01);
 
@@ -237,7 +251,7 @@ int adx_set_volume(int volume)
 int adx_restart()
 {
 	if (!adx || !adx_in) return 0;
-
+    
     adx_msg msg;
 	msg.type = ADX_MSG_RESTART;
 

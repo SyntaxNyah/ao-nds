@@ -91,16 +91,6 @@ static void fadeDisclaimer(u32 tilesLen)
 	REG_BLDCNT = BLEND_NONE;
 }
 
-static int adx_cothread(void* arg)
-{
-	while (gEngine->isRunning())
-	{
-		adx_update();
-		cothread_yield_irq(IRQ_VBLANK);
-	}
-	return 0;
-}
-
 static void handler()
 {
 	debugLabelPressA("memory alloc fail");
@@ -178,8 +168,6 @@ int main()
 	gEngine = new Engine;
 	gEngine->changeScreen(new UIScreenWifi);
 
-	cothread_t adxThread = cothread_create(adx_cothread, 0, 1024*4, 0);
-
 	while (gEngine->isRunning())
 	{
 		cothread_yield_irq(IRQ_VBLANK);
@@ -201,9 +189,11 @@ int main()
 		oamUpdate(&oamSub);
 	}
 
+	/*
 	while (!cothread_has_joined(adxThread))
 		cothread_yield_irq(IRQ_VBLANK);
 	cothread_delete(adxThread);
+	*/
 
 	delete gEngine;
 	ao_mem_free(acename);
