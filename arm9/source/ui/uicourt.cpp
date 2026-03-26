@@ -489,6 +489,8 @@ void UIScreenCourt::onMessageCT(void* pUserData, std::string msg)
 	// insert to chatlog
 	std::u16string logMsg = utf8::utf8to16(name+": "+chatmsg);
 	separateLines(0, logMsg, 7, false, pSelf->oocLog);
+	while (pSelf->oocLog.size() > 300)
+		pSelf->oocLog.erase(pSelf->oocLog.begin());
 
 	if (isServer)
 	{
@@ -520,6 +522,8 @@ void UIScreenCourt::onMessageCT(void* pUserData, std::string msg)
 			pSelf->loggedIn = true;
 			std::u16string logMsg = u"You can now enable Guard Mode in the main menu. This will allow you to receive modcalls.";
 			separateLines(0, logMsg, 7, false, pSelf->oocLog);
+			while (pSelf->oocLog.size() > 300)
+				pSelf->oocLog.erase(pSelf->oocLog.begin());
 		}
 		else if (chatmsg.find("no longer a mod") != std::string::npos)
 			pSelf->loggedIn = false;
@@ -790,6 +794,8 @@ void UIScreenCourt::onMessageAUTH(void* pUserData, std::string msg)
 	{
 		std::u16string logMsg = u"You can now enable Guard Mode in the main menu. This will allow you to receive modcalls.";
 		separateLines(0, logMsg, 7, false, pSelf->oocLog);
+		while (pSelf->oocLog.size() > 300)
+			pSelf->oocLog.erase(pSelf->oocLog.begin());
 	}
 }
 
@@ -801,6 +807,8 @@ void UIScreenCourt::onMessageZZ(void* pUserData, std::string msg)
 
 	std::u16string modcall = utf8::utf8to16(argumentAt(msg, 1));
 	separateLines(0, modcall, 7, false, pSelf->oocLog);
+	while (pSelf->oocLog.size() > 300)
+		pSelf->oocLog.erase(pSelf->oocLog.begin());
 
 	pSelf->changeScreen(new UICourtMessage(pSelf, modcall));
 }
